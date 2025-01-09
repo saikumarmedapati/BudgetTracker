@@ -1,0 +1,124 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+	background-color: #f4f4f4;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	text-align: center;
+}
+
+.add-transaction-button {
+	display: block;
+	margin: 10px auto;
+	background-color: #28a745;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.add-transaction-button:hover {
+	background-color: #218838;
+}
+
+form {
+	margin-top: 20px;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+input[type="text"], input[type="date"] {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 15px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.radio-group {
+	margin-bottom: 15px;
+}
+
+.radio-group label {
+	display: inline;
+	margin-right: 10px;
+}
+
+.submit-button {
+	background-color: #007bff;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.submit-button:hover {
+	background-color: #0056b3;
+}
+
+table {
+	width: 100%;
+	margin-top: 30px;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+.actions button {
+	background-color: #ffc107;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	margin-right: 5px;
+}
+
+.actions button.remove {
+	background-color: #dc3545;
+}
+
+.actions button:hover {
+	opacity: 0.8;
+}
+
+.no-transactions-box {
+	padding: 20px;
+	background-color: #e9f7ef;
+	border: 1px solid #c3e6cb;
+	border-radius: 5px;
+	color: #155724;
+	text-align: center;
+	margin-top: 30px;
+}
+
+.no-transactions {
+	font-size: 18px;
+	color: #6c757d;
+}
