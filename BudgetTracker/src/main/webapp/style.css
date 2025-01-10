@@ -29,6 +29,19 @@ h1 {
 	cursor: pointer;
 }
 
+.alltransaction-button {
+	display: block;
+	margin: 10px auto;
+	background-color: blue;
+	width: 120px;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
 .add-transaction-button:hover {
 	background-color: #218838;
 }

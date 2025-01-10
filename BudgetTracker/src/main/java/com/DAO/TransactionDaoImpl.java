@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.DB.Connector;
-import com.DAO.TransactionDao;
-import com.DAO.TransactionDaoImpl;
 import com.user.entities.Transaction;
 
 public class TransactionDaoImpl implements TransactionDao {
@@ -135,7 +133,7 @@ public class TransactionDaoImpl implements TransactionDao {
 	    boolean f = false;
 	    try {
 	        // Update SQL query for updating credit and debit values based on the transaction ID
-	        String sql = "UPDATE transactions SET credit = ?, debit = ? WHERE txn_number = ?";
+	        String sql = "UPDATE transactions SET credit = ?, debit = ? WHERE t_id = ?";
 	        PreparedStatement ps = connection.prepareStatement(sql);
 	        ps.setDouble(1, credit);
 	        ps.setDouble(2, debit);
@@ -151,6 +149,32 @@ public class TransactionDaoImpl implements TransactionDao {
 	    }
 	    return f;
 	}
+	
+	//retrive transaction details by id
+	public Transaction getTransactionById(String transactionId) {
+	    Transaction transaction = null;
+	    String query = "SELECT t_id, header, date, credit, debit FROM transactions WHERE t_id = ?";
+
+	    try {
+	        PreparedStatement ps = connection.prepareStatement(query);
+	        ps.setString(1, transactionId); // Set the transactionId parameter
+	        ResultSet resultSet = ps.executeQuery();
+
+	        if (resultSet.next()) {
+	            transaction = new Transaction();
+	            transaction.setTransactionId(resultSet.getString("t_id"));
+	            transaction.setHeader(resultSet.getString("header"));
+	            transaction.setDate(resultSet.getString("date")); // Convert Date to String
+	            transaction.setCredit(parseDoubleOrZero(resultSet.getString("credit"))); // Handle VARCHAR credit
+	            transaction.setDebit(parseDoubleOrZero(resultSet.getString("debit"))); // Handle VARCHAR debit
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return transaction;
+	}
+
 	
 	@Override
 	public boolean removeTransaction(String transactionId) {
@@ -170,5 +194,65 @@ public class TransactionDaoImpl implements TransactionDao {
 	        e.printStackTrace(); // Log any exceptions
 	    }
 	    return f;
+	}
+	
+	public Transaction generateReport(String startDate, String endDate) {
+	    Transaction transactionReport = new Transaction();  // Create a Transaction object to hold the aggregated report data
+	    List<Transaction> transactionDetailsList = new ArrayList<>();  // List to hold individual transaction details
+
+	    // SQL query to select total credits and debits between the start and end date
+	    String querySummary = "SELECT SUM(credit) AS totalCredit, SUM(debit) AS totalDebit FROM transactions WHERE date BETWEEN ? AND ?";
+	    String queryDetails = "SELECT t_id, header, date, credit, debit FROM transactions WHERE date BETWEEN ? AND ?";  // Query to fetch individual transactions
+
+	    try {
+	        // Prepare the statement for the summary (aggregated) query
+	        PreparedStatement psSummary = connection.prepareStatement(querySummary);
+	        psSummary.setString(1, startDate);  // Set the start date
+	        psSummary.setString(2, endDate);    // Set the end date
+
+	        // Execute the summary query and retrieve the results
+	        ResultSet resultSetSummary = psSummary.executeQuery();
+
+	        // Check if the result set has data and extract the totals
+	        if (resultSetSummary.next()) {
+	            double totalCredit = resultSetSummary.getDouble("totalCredit"); // Get total credit
+	            double totalDebit = resultSetSummary.getDouble("totalDebit");   // Get total debit
+
+	            // Set the values in the Transaction object
+	            transactionReport.setTotalCredit(totalCredit);
+	            transactionReport.setTotalDebit(totalDebit);
+	            transactionReport.setBalance(totalCredit - totalDebit);  // Calculate balance
+	        }
+
+	        // Prepare the statement for the individual transaction details query
+	        PreparedStatement psDetails = connection.prepareStatement(queryDetails);
+	        psDetails.setString(1, startDate);  // Set the start date
+	        psDetails.setString(2, endDate);    // Set the end date
+
+	        // Execute the details query and retrieve the results
+	        ResultSet resultSetDetails = psDetails.executeQuery();
+
+	        // Loop through the result set and add each transaction detail to the list
+	        while (resultSetDetails.next()) {
+	            Transaction details = new Transaction();
+	            details.setTransactionId(resultSetDetails.getString("t_id"));
+	            details.setHeader(resultSetDetails.getString("header"));
+	            details.setDate(resultSetDetails.getString("date"));
+	            details.setCredit(resultSetDetails.getDouble("credit"));
+	            details.setDebit(resultSetDetails.getDouble("debit"));
+
+
+	            transactionDetailsList.add(details);  // Add the transaction details to the list
+	        }
+
+	        // Set the transaction details list in the transactionReport object
+	        transactionReport.setTransactionDetailsList(transactionDetailsList);
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();  // Log any exceptions that occur
+	    }
+
+	    // Return the Transaction object containing the aggregated report and details
+	    return transactionReport;
 	}
 }

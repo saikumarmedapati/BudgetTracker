@@ -70,13 +70,13 @@ public class AddTransactionServlet extends HttpServlet {
 //        }
 
         // Print debug statements for input data
-        System.out.println("Transaction Data Received:");
-        System.out.println("Transaction ID: " + transactionIdStr);
-        System.out.println("Header: " + header);
-        System.out.println("Date: " + dateStr);
-        System.out.println("Type: " + type);
-        System.out.println("Credit: " + credit);
-        System.out.println("Debit: " + debit);
+//        System.out.println("Transaction Data Received:");
+//        System.out.println("Transaction ID: " + transactionIdStr);
+//        System.out.println("Header: " + header);
+//        System.out.println("Date: " + dateStr);
+//        System.out.println("Type: " + type);
+//        System.out.println("Credit: " + credit);
+//        System.out.println("Debit: " + debit);
 
         // Create a transaction object
         Transaction t = new Transaction();
@@ -89,7 +89,7 @@ public class AddTransactionServlet extends HttpServlet {
         // Save transaction to the database
         TransactionDaoImpl transactionDao = new TransactionDaoImpl();
         boolean isSaved = transactionDao.addDetails(t);
-        System.out.println("Transaction Saved: " + isSaved);
+//        System.out.println("Transaction Saved: " + isSaved);
         
         response.sendRedirect("index.jsp");
     }

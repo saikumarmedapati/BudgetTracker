@@ -1,7 +1,6 @@
 package com.user.entities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 public class Transaction {
 
@@ -14,6 +13,8 @@ public class Transaction {
 	private double totalCredit;
     private double totalDebit;
     private double balance;
+    
+    public List<Transaction> transactionDetailsList;
 
 	// Constructors, Getters, and Setters
 	
@@ -98,4 +99,12 @@ public class Transaction {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
+	
+	public List<Transaction> getTransactionDetailsList() {
+        return transactionDetailsList;
+    }
+
+    public void setTransactionDetailsList(List<Transaction> transactionDetailsList) {
+        this.transactionDetailsList = transactionDetailsList;
+    }
 }
