@@ -9,7 +9,9 @@
 <head>
 <title>Budget Tracker</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 </head>
 <body>
 
@@ -22,8 +24,10 @@
 	double balance = totals.getBalance();
 	%>
 
-	<div class="container">
+	<div
+		class="container col-md-4 mt-5 border border-success rounded shadow p-4">
 		<h1>Budget Tracker</h1>
+		<br>
 
 		<button class="add-transaction-button"
 			onclick="document.getElementById('transactionForm').style.display='block';">
@@ -31,101 +35,60 @@
 
 		<form id="transactionForm" action="add-transaction-servlet"
 			method="post" style="display: none;">
-			<input type="hidden" name="transactionId"
-				value="<%=java.util.UUID.randomUUID().toString()%>"> <label
-				for="header">Transaction Header:</label> <input type="text"
-				id="header" name="header" required> <label for="date">Transaction
-				Date:</label> <input type="date" id="date" name="date" required>
-			<div class="radio-group">
-				<label>Transaction Type:</label> <label><input type="radio"
-					name="type" value="income" required> Income</label> <label><input
-					type="radio" name="type" value="expense" required> Expense</label>
+			<div class="mb-3">
+				<input type="hidden" name="transactionId"
+					value="<%=java.util.UUID.randomUUID().toString()%>"> <label
+					for="header" class="form-label">Transaction Header:</label> <input
+					type="text" id="header" name="header" class="form-control" required>
 			</div>
 
-			<label for="amount">Amount:</label> <input type="number" id="amount"
-				name="amount" required>
+			<div class="mb-3">
+				<label for="date" class="form-label">Transaction Date:</label> <input
+					type="date" id="date" name="date" class="form-control" required>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Transaction Type:</label>
+				<div class="form-check form-check-inline">
+					<input type="radio" name="type" value="income"
+						class="form-check-input" required> <label
+						class="form-check-label">Income</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="radio" name="type" value="expense"
+						class="form-check-input" required> <label
+						class="form-check-label">Expense</label>
+				</div>
+			</div>
+
+			<div class="mb-3">
+				<label for="amount" class="form-label">Amount:</label> <input
+					type="number" id="amount" name="amount" class="form-control"
+					required>
+			</div>
 
 			<button type="submit" class="btn btn-primary">Add
 				Transaction</button>
 		</form>
-
-		<div id="transactionListContainer">
-			<%
-			TransactionDaoImpl transactionDao1 = new TransactionDaoImpl();
-			List<Transaction> transactions = null;
-			try {
-				transactions = transactionDao1.getAllTransactions();
-			} catch (Exception e) {
-				e.printStackTrace();
-				transactions = new ArrayList<>();
-			}
-
-			if (transactions == null || transactions.isEmpty()) {
-			%>
-			<div id="noTransactionsBox" class="no-transactions-box">
-				<div class="no-transactions" id="noTransactionsMessage">No
-					transactions added</div>
-			</div>
-			<%
-			} else {
-			%>
-			<table id="transactionTable">
-				<thead>
-					<tr>
-						<th>Transaction ID</th>
-						<th>Header</th>
-						<th>Date</th>
-						<th>Credit</th>
-						<th>Debit</th>
-						<!--  <th>Actions</th>-->
-					</tr>
-				</thead>
-				<tbody>
-					<%
-					for (Transaction transaction : transactions) {
-						String transactionId = transaction.getTransactionId() != null ? transaction.getTransactionId() : "N/A";
-						String header = transaction.getHeader() != null ? transaction.getHeader() : "No Header";
-						String date = transaction.getDate() != null ? transaction.getDate() : "No Date";
-						double credit = transaction.getCredit() != 0.0 ? transaction.getCredit() : 0.0;
-						double debit = transaction.getDebit() != 0.0 ? transaction.getDebit() : 0.0;
-					%>
-					<tr>
-						<td><%=transactionId%></td>
-						<td><%=header%></td>
-						<td><%=date%></td>
-						<td><%=credit%></td>
-						<td><%=debit%></td>
-						<!--  <td class="actions">
-							<button
-								onclick="editTransaction('<%=transaction.getTransactionId()%>')">Edit</button>
-							<button class="remove"
-								onclick="removeTransaction('<%=transaction.getTransactionId()%>')">Remove</button>
-						</td>-->
-					</tr>
-					<%
-					}
-					%>
-				</tbody>
-			</table>
-			<%
-			}
-			%>
-		</div>
-		<h3>Account Statement</h3>
-		<div>
-			<p>
-				Total Credit: <span id="totalCredit"><%=String.format("%.2f", totalCredit)%></span>
-			</p>
-			<p>
-				Total Debit: <span id="totalDebit"><%=String.format("%.2f", totalDebit)%></span>
-			</p>
-			<p>
-				Balance: <span id="balance"><%=String.format("%.2f", balance)%></span>
-			</p>
-		</div>
 	</div>
 
-	<script src="script.js"></script>
+	<div class="d-flex justify-content-center align-items-center"
+		style="min-height: 10vh;">
+		<button type="button" class="btn btn-primary shadow"
+			style="padding: 6px 12px; font-size: 14px; height: 40px;"
+			data-target="mytransactions.jsp"
+			onclick="window.location.href='mytransactions.jsp'">My
+			Transactions</button>
+	</div>
 
+
+
+
+
+	<script src="script.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
